@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-naryad}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-naryad}
+      POSTGRES_DB: ${POSTGRES_DB:-naryad}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-naryad}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./server
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      DATABASE_URL: postgres://${POSTGRES_USER:-naryad}:${POSTGRES_PASSWORD:-naryad}@db:5432/${POSTGRES_DB:-naryad}
+      JWT_SECRET: ${JWT_SECRET:?задайте JWT_SECRET в .env}
+      APP_BASE_URL: ${APP_BASE_URL:-http://localhost}
+      PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost}
+      REQUIRE_EMAIL_VERIFICATION: ${REQUIRE_EMAIL_VERIFICATION:-true}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@naryad.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-change_me}
+      SMTP_URL: ${SMTP_URL:-}
+      MAIL_FROM: ${MAIL_FROM:-NARYAD <no-reply@naryad.local>}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      CRON_TOKEN: ${CRON_TOKEN:-}
+      UPLOAD_DIR: /data/uploads
+    volumes:
+      - uploads_data:/data/uploads
+
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "${HTTP_PORT:-80}:80"
+
+volumes:
+  db_data:
+  uploads_data:

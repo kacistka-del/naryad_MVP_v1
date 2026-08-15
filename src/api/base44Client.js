@@ -1,1 +1,7 @@
-export const db = { auth: { isAuthenticated: async ()=>false, me: async ()=>null }, entities: new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } }; export const base44=db; export default db;
+import { db } from '@/lib/self-hosted-db';
+
+// Исторические импорты: раньше здесь создавался клиент Base44.
+// Теперь это тот же самохостимый клиент, что и в globalThis.__B44_DB__.
+export { db };
+export const base44 = db;
+export default db;

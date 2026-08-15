@@ -15,4 +15,5 @@ RUN mkdir -p /data/uploads
 
 EXPOSE 8080
 
-CMD ["node", "src/index.js"]
+# Применяем миграции/seed при старте (безопасно — скрипты idempotent)
+CMD ["sh", "-c", "node src/migrate.js && node src/seed.js && node src/index.js"]

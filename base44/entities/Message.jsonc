@@ -1,0 +1,69 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string"
+    },
+    "senderId": {
+      "type": "string"
+    },
+    "senderRole": {
+      "type": "string",
+      "enum": [
+        "CLIENT",
+        "EXECUTOR",
+        "ADMIN",
+        "SYSTEM"
+      ]
+    },
+    "text": {
+      "type": "string"
+    },
+    "contactExchangeSuspected": {
+      "type": "boolean",
+      "default": false
+    },
+    "systemMessage": {
+      "type": "boolean",
+      "default": false
+    },
+    "participants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "orderId",
+    "senderRole",
+    "text",
+    "participants"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.participants": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

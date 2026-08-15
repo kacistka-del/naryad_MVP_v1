@@ -1,0 +1,46 @@
+{
+  "name": "Review",
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string"
+    },
+    "executorId": {
+      "type": "string"
+    },
+    "clientId": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "hidden": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "orderId",
+    "executorId",
+    "rating"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

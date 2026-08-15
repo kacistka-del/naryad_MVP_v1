@@ -1,0 +1,138 @@
+{
+  "name": "Order",
+  "type": "object",
+  "properties": {
+    "orderNumber": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "categoryCode": {
+      "type": "string"
+    },
+    "categoryId": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "budget": {
+      "type": "number"
+    },
+    "finalPrice": {
+      "type": "number"
+    },
+    "commissionRate": {
+      "type": "number"
+    },
+    "commissionAmount": {
+      "type": "number"
+    },
+    "desiredDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "address": {
+      "type": "string"
+    },
+    "contactName": {
+      "type": "string"
+    },
+    "contactPhone": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NEW",
+        "REVIEW",
+        "NEEDSINFO",
+        "SEARCHING",
+        "ASSIGNED",
+        "CONFIRMED",
+        "INPROGRESS",
+        "AWAITINGCONFIRMATION",
+        "COMPLETED",
+        "CANCELLED",
+        "DISPUTE"
+      ],
+      "default": "NEW"
+    },
+    "clientId": {
+      "type": "string"
+    },
+    "executorId": {
+      "type": "string"
+    },
+    "assignedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cancelReason": {
+      "type": "string"
+    },
+    "cancelledByRole": {
+      "type": "string",
+      "enum": [
+        "CLIENT",
+        "EXECUTOR",
+        "ADMIN",
+        "SYSTEM"
+      ]
+    },
+    "autoCompleted": {
+      "type": "boolean",
+      "default": false
+    },
+    "slaBreachedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "description",
+    "categoryCode",
+    "city",
+    "contactName",
+    "contactPhone"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.executorId": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.executorId": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

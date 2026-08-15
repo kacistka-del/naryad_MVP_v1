@@ -1,0 +1,14 @@
+{
+  "name": "runPlanner",
+  "entry": "entry.ts",
+  "automations": [
+    {
+      "type": "scheduled",
+      "name": "planner_every_5min",
+      "schedule_mode": "recurring",
+      "schedule_type": "simple",
+      "repeat_unit": "minutes",
+      "repeat_interval": 5
+    }
+  ]
+}

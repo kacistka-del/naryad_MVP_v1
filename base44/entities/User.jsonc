@@ -1,0 +1,29 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "user"
+      ],
+      "default": "user"
+    },
+    "accountType": {
+      "type": "string",
+      "enum": [
+        "client",
+        "executor",
+        "admin"
+      ]
+    },
+    "phone": {
+      "type": "string"
+    },
+    "phoneVerified": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

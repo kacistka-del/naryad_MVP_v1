@@ -1,0 +1,92 @@
+{
+  "name": "Executor",
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string"
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "specialties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "categoryCodes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "city": {
+      "type": "string"
+    },
+    "contacts": {
+      "type": "string"
+    },
+    "moderationStatus": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "PENDING",
+        "APPROVED",
+        "REJECTED"
+      ],
+      "default": "DRAFT"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
+    "ratingAvg": {
+      "type": "number",
+      "default": 0
+    },
+    "ordersCount": {
+      "type": "number",
+      "default": 0
+    },
+    "cancelRate": {
+      "type": "number",
+      "default": 0
+    },
+    "activeOrders": {
+      "type": "number",
+      "default": 0
+    },
+    "priorityUntil": {
+      "type": "string",
+      "format": "date"
+    },
+    "isSeed": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
